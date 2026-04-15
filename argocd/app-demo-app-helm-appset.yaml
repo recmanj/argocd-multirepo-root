@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: app-demo-backend
+  name: app-demo-app-helm
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -25,10 +25,10 @@ spec:
               repoURL: git@github.com:recmanj/argocd-multirepo-demo-app-helm.git
               revision: HEAD
               files:
-                - path: "demo-backend/envs/{{ .values.env }}/config.json"
+                - path: "*/envs/{{ .values.env }}/config.json"
   template:
     metadata:
-      name: "demo-backend"
+      name: "{{ index .path.segments 0 }}"
     spec:
       project: demo-app-helm
       sources:
@@ -38,8 +38,8 @@ spec:
           helm:
             releaseName: "{{ .releaseName }}"
             valueFiles:
-              - $values/demo-backend/values.yaml
-              - $values/demo-backend/envs/{{ .values.env }}/values.yaml
+              - $values/{{ index .path.segments 0 }}/values.yaml
+              - $values/{{ index .path.segments 0 }}/envs/{{ .values.env }}/values.yaml
         - repoURL: git@github.com:recmanj/argocd-multirepo-demo-app-helm.git
           targetRevision: HEAD
           ref: values

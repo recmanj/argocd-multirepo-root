@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: admin
+  namespace: argocd
+  annotations:
+    helm.sh/resource-policy: keep
+spec:
+  description: ArgoCD control plane (root app, AppProjects, ApplicationSets). Restricted to admins.
+  sourceRepos:
+    - {{ .Values.repoURL }}
+  destinations:
+    - namespace: argocd
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist:
+    - group: argoproj.io
+      kind: AppProject
+    - group: argoproj.io
+      kind: ApplicationSet
+    - group: argoproj.io
+      kind: Application

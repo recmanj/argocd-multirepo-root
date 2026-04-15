@@ -1,0 +1,91 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: infrastructure
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  description: Platform infrastructure managed by the ops team (ArgoCD, cert-manager, CloudNativePG, observability, plus cluster-wide platform resources like ClusterIssuers and per-app PG Cluster CRs).
+  sourceRepos:
+    - git@github.com:recmanj/argocd-multirepo-infra.git
+    - https://charts.jetstack.io
+    - https://grafana.github.io/helm-charts
+    - https://cloudnative-pg.github.io/charts
+    - https://argoproj.github.io/argo-helm
+  destinations:
+    - namespace: argocd
+      server: https://kubernetes.default.svc
+    - namespace: cert-manager
+      server: https://kubernetes.default.svc
+    - namespace: cloudnativepg
+      server: https://kubernetes.default.svc
+    - namespace: kube-system
+      server: https://kubernetes.default.svc
+    - namespace: observability
+      server: https://kubernetes.default.svc
+    - namespace: argocd-image-updater
+      server: https://kubernetes.default.svc
+    # Per-app namespaces needed because platform-resources (PG Cluster CRs) deploys into each app namespace
+    - namespace: demo-app
+      server: https://kubernetes.default.svc
+    - namespace: demo-app-chart
+      server: https://kubernetes.default.svc
+    - namespace: ecflow-web
+      server: https://kubernetes.default.svc
+    - namespace: expert
+      server: https://kubernetes.default.svc
+    - namespace: nexhub
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+    - group: cert-manager.io
+      kind: ClusterIssuer
+  namespaceResourceWhitelist:
+    - group: ""
+      kind: ServiceAccount
+    - group: ""
+      kind: Service
+    - group: ""
+      kind: ConfigMap
+    - group: ""
+      kind: Secret
+    - group: ""
+      kind: PersistentVolumeClaim
+    - group: apps
+      kind: Deployment
+    - group: apps
+      kind: StatefulSet
+    - group: apps
+      kind: DaemonSet
+    - group: apps
+      kind: ReplicaSet
+    - group: ""
+      kind: Pod
+    - group: batch
+      kind: Job
+    - group: networking.k8s.io
+      kind: NetworkPolicy
+    - group: rbac.authorization.k8s.io
+      kind: Role
+    - group: rbac.authorization.k8s.io
+      kind: RoleBinding
+    - group: cert-manager.io
+      kind: Certificate
+    - group: cert-manager.io
+      kind: Issuer
+    - group: postgresql.cnpg.io
+      kind: Cluster
+    - group: argoproj.io
+      kind: Application

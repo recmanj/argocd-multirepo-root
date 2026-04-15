@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: demo-app-helm
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  description: Team A — deploys demo-backend + demo-frontend from the demo-app-helm repo using the recmanj.github.io/demo-charts Helm registry.
+  sourceRepos:
+    - git@github.com:recmanj/argocd-multirepo-demo-app-helm.git
+    - https://recmanj.github.io/demo-charts
+  destinations:
+    - namespace: demo-app-chart
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: ""
+      kind: ServiceAccount
+    - group: ""
+      kind: Service
+    - group: ""
+      kind: ConfigMap
+    - group: ""
+      kind: Secret
+    - group: apps
+      kind: Deployment
+    - group: apps
+      kind: ReplicaSet
+    - group: ""
+      kind: Pod
+    - group: networking.k8s.io
+      kind: Ingress
+    - group: batch
+      kind: Job
+    - group: batch
+      kind: CronJob

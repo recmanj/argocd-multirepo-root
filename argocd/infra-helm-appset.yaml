@@ -1,0 +1,63 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: infra-helm-appset
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - "missingkey=error"
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: env
+                    operator: Exists
+              values:
+                env: '{{ index .metadata.labels "env" }}'
+          - git:
+              repoURL: git@github.com:recmanj/argocd-multirepo-infra.git
+              revision: HEAD
+              files:
+                - path: "infra-helm/*/envs/{{ .values.env }}/config.json"
+  template:
+    metadata:
+      name: "{{ index .path.segments 1 }}"
+      annotations:
+        argocd.argoproj.io/sync-wave: "{{ .syncWave }}"
+    spec:
+      project: infrastructure
+      sources:
+        - repoURL: "{{ .chartRepo }}"
+          chart: "{{ .chart }}"
+          targetRevision: "{{ .version }}"
+          helm:
+            releaseName: "{{ .releaseName }}"
+            valueFiles:
+              - $values/infra-helm/{{ index .path.segments 1 }}/values.yaml
+              - $values/infra-helm/{{ index .path.segments 1 }}/envs/{{ .values.env }}/values.yaml
+        - repoURL: git@github.com:recmanj/argocd-multirepo-infra.git
+          targetRevision: HEAD
+          ref: values
+      destination:
+        server: "{{ .server }}"
+        namespace: "{{ .namespace }}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+        retry:
+          limit: 5
+          backoff:
+            duration: 10s
+            factor: 2
+            maxDuration: 5m

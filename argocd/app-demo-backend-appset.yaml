@@ -1,0 +1,70 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: app-demo-backend
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - "missingkey=error"
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: env
+                    operator: Exists
+              values:
+                env: '{{ index .metadata.labels "env" }}'
+          - git:
+              repoURL: git@github.com:recmanj/argocd-multirepo-demo-app-helm.git
+              revision: HEAD
+              files:
+                - path: "demo-backend/envs/{{ .values.env }}/config.json"
+  template:
+    metadata:
+      name: "demo-backend"
+    spec:
+      project: demo-app-helm
+      sources:
+        - repoURL: "{{ .chartRepo }}"
+          chart: "{{ .chart }}"
+          targetRevision: "{{ .version }}"
+          helm:
+            releaseName: "{{ .releaseName }}"
+            valueFiles:
+              - $values/demo-backend/values.yaml
+              - $values/demo-backend/envs/{{ .values.env }}/values.yaml
+        - repoURL: git@github.com:recmanj/argocd-multirepo-demo-app-helm.git
+          targetRevision: HEAD
+          ref: values
+      destination:
+        server: "{{ .server }}"
+        namespace: "{{ .namespace }}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        retry:
+          limit: 5
+          backoff:
+            duration: 10s
+            factor: 2
+            maxDuration: 5m
+  templatePatch: |
+    {{- if hasKey . "imageUpdater" }}
+    metadata:
+      annotations:
+        argocd-image-updater.argoproj.io/image-list: {{ .imageUpdater.alias }}={{ .imageUpdater.image }}
+        argocd-image-updater.argoproj.io/{{ .imageUpdater.alias }}.update-strategy: {{ .imageUpdater.strategy }}
+        argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/argocd-image-updater-git-creds
+        argocd-image-updater.argoproj.io/git-branch: main
+        argocd-image-updater.argoproj.io/{{ .imageUpdater.alias }}.helm.image-tag: image.tag
+    {{- end }}

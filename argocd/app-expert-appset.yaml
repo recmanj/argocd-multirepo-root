@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: app-expert
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - "missingkey=error"
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: env
+                    operator: Exists
+              values:
+                env: '{{ index .metadata.labels "env" }}'
+          - git:
+              repoURL: git@github.com:recmanj/argocd-multirepo-expert.git
+              revision: HEAD
+              directories:
+                - path: "envs/{{ .values.env }}"
+  template:
+    metadata:
+      name: "expert"
+    spec:
+      project: expert
+      source:
+        repoURL: git@github.com:recmanj/argocd-multirepo-expert.git
+        targetRevision: HEAD
+        path: "envs/{{ .values.env }}"
+      destination:
+        server: "{{ .server }}"
+        namespace: "expert"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        retry:
+          limit: 3
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m

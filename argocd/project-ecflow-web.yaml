@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: ecflow-web
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  description: ecflow-web team — deploys the ecflow-web app from the ecflow-web repo using Kustomize.
+  sourceRepos:
+    - git@github.com:recmanj/argocd-multirepo-ecflow-web.git
+  destinations:
+    - namespace: ecflow-web
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: ""
+      kind: ServiceAccount
+    - group: ""
+      kind: Service
+    - group: ""
+      kind: ConfigMap
+    - group: ""
+      kind: Secret
+    - group: apps
+      kind: Deployment
+    - group: apps
+      kind: ReplicaSet
+    - group: ""
+      kind: Pod
+    - group: networking.k8s.io
+      kind: Ingress
+    - group: batch
+      kind: Job
+    - group: batch
+      kind: CronJob

@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  description: Reserved for future platform-level apps that span multiple teams. Currently unused (platform-resources uses the infrastructure project).
+  sourceRepos:
+    - git@github.com:recmanj/argocd-multirepo-infra.git
+  destinations: []
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist: []

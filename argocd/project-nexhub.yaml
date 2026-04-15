@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: nexhub
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  description: nexhub team — deploys the nexhub app from the nexhub repo using Kustomize.
+  sourceRepos:
+    - git@github.com:recmanj/argocd-multirepo-nexhub.git
+  destinations:
+    - namespace: nexhub
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: ""
+      kind: ServiceAccount
+    - group: ""
+      kind: Service
+    - group: ""
+      kind: ConfigMap
+    - group: ""
+      kind: Secret
+    - group: apps
+      kind: Deployment
+    - group: apps
+      kind: ReplicaSet
+    - group: ""
+      kind: Pod
+    - group: networking.k8s.io
+      kind: Ingress
+    - group: batch
+      kind: Job
+    - group: batch
+      kind: CronJob

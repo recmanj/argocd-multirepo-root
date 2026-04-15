@@ -1,0 +1,22 @@
+# Helm
+charts/
+Chart.lock
+
+# Kustomize
+kustomize-build-output/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Secrets
+.env
+*.key
+*.pem

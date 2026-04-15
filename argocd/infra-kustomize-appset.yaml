@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: infra-kustomize-appset
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - "missingkey=error"
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: env
+                    operator: Exists
+              values:
+                env: '{{ index .metadata.labels "env" }}'
+          - git:
+              repoURL: git@github.com:recmanj/argocd-multirepo-infra.git
+              revision: HEAD
+              files:
+                - path: "infra-kustomize/*/config.json"
+  template:
+    metadata:
+      name: "{{ .appName }}"
+      annotations:
+        argocd.argoproj.io/sync-wave: "{{ .syncWave }}"
+    spec:
+      project: "{{ .appProject }}"
+      source:
+        repoURL: git@github.com:recmanj/argocd-multirepo-infra.git
+        targetRevision: HEAD
+        path: "infra-kustomize/{{ .appName }}/envs/{{ .values.env }}"
+      destination:
+        server: "{{ .server }}"
+        namespace: "{{ .namespace }}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+        retry:
+          limit: 5
+          backoff:
+            duration: 10s
+            factor: 2
+            maxDuration: 5m
+  templatePatch: |
+    spec:
+      syncPolicy:
+        automated:
+          prune: {{ .prune }}

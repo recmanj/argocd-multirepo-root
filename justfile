@@ -12,3 +12,8 @@ argocd-password:
 
 render-bootstrap env=default_env:
     helm template bootstrap ./bootstrap --set env={{ env }} -n argocd
+
+render-argocd:
+    @find argocd -name '*.yaml' -exec echo '---' \; -exec cat {} \;
+
+render env=default_env: (render-bootstrap env) render-argocd

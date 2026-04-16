@@ -1,0 +1,55 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: app-demo-app-kustomize-chart
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - "missingkey=error"
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  ignoreApplicationDifferences:
+    - jsonPointers:
+        - /spec/syncPolicy
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: env
+                    operator: Exists
+              values:
+                env: '{{ index .metadata.labels "env" }}'
+          - git:
+              repoURL: git@github.com:recmanj/argocd-multirepo-demo-app-kustomize-chart.git
+              revision: HEAD
+              directories:
+                - path: "*/envs/{{ .values.env }}"
+  template:
+    metadata:
+      name: '{{ index .path.segments 0 }}'
+    spec:
+      project: demo-app-kustomize-chart
+      source:
+        repoURL: git@github.com:recmanj/argocd-multirepo-demo-app-kustomize-chart.git
+        targetRevision: HEAD
+        path: "{{ .path.path }}"
+      destination:
+        server: "{{ .server }}"
+        namespace: "demo-app-kustomize-chart"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        retry:
+          limit: 3
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m

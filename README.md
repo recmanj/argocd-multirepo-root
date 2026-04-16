@@ -12,6 +12,7 @@ A single root Application watches the `argocd/` directory in this repo. That dir
 | [argocd-multirepo-infra](https://github.com/recmanj/argocd-multirepo-infra) | Platform infrastructure (ArgoCD, cert-manager, CloudNativePG, observability) |
 | [argocd-multirepo-demo-app-helm](https://github.com/recmanj/argocd-multirepo-demo-app-helm) | Demo app - Helm (backend + frontend) |
 | [argocd-multirepo-demo-app-kustomize](https://github.com/recmanj/argocd-multirepo-demo-app-kustomize) | Demo app - Kustomize |
+| [argocd-multirepo-demo-app-kustomize-chart](https://github.com/recmanj/argocd-multirepo-demo-app-kustomize-chart) | Demo app - Kustomize helmCharts |
 | [argocd-multirepo-ecflow-web](https://github.com/recmanj/argocd-multirepo-ecflow-web) | ecflow-web team (Kustomize) |
 | [argocd-multirepo-expert](https://github.com/recmanj/argocd-multirepo-expert) | expert team (Kustomize) |
 | [argocd-multirepo-nexhub](https://github.com/recmanj/argocd-multirepo-nexhub) | nexhub team (Kustomize) |
@@ -27,17 +28,18 @@ graph TD
 
     cluster --> argocd --> root
 
-    subgraph "AppProjects (9)"
+    subgraph "AppProjects (10)"
         projects["admin · default · infrastructure · platform
-        demo-app-helm · demo-app-kustomize
+        demo-app-helm · demo-app-kustomize · demo-app-kustomize-chart
         ecflow-web · expert · nexhub"]
     end
 
-    subgraph "ApplicationSets (8)"
+    subgraph "ApplicationSets (9)"
         infra-helm-appset -->|matrix| infra[argocd-multirepo-infra]
         infra-kustomize-appset -->|matrix| infra
         app-demo-app-helm -->|matrix| helm[argocd-multirepo-demo-app-helm]
         app-demo-app-kustomize -->|matrix| kust[argocd-multirepo-demo-app-kustomize]
+        app-demo-app-kustomize-chart -->|matrix| kustchart[argocd-multirepo-demo-app-kustomize-chart]
         app-ecflow-web -->|matrix| ecflow[argocd-multirepo-ecflow-web]
         app-expert -->|matrix| expert[argocd-multirepo-expert]
         app-nexhub -->|matrix| nexhub[argocd-multirepo-nexhub]
@@ -45,7 +47,7 @@ graph TD
 
     root --> projects
     root --> infra-helm-appset & infra-kustomize-appset
-    root --> app-demo-app-helm & app-demo-app-kustomize
+    root --> app-demo-app-helm & app-demo-app-kustomize & app-demo-app-kustomize-chart
     root --> app-ecflow-web & app-expert & app-nexhub
 ```
 

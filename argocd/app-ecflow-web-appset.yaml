@@ -25,16 +25,16 @@ spec:
               repoURL: git@github.com:recmanj/argocd-multirepo-ecflow-web.git
               revision: HEAD
               directories:
-                - path: "envs/{{ .values.env }}"
+                - path: "*/envs/{{ .values.env }}"
   template:
     metadata:
-      name: "ecflow-web"
+      name: '{{ index .path.segments 0 }}'
     spec:
       project: ecflow-web
       source:
         repoURL: git@github.com:recmanj/argocd-multirepo-ecflow-web.git
         targetRevision: HEAD
-        path: "envs/{{ .values.env }}"
+        path: "{{ .path.path }}"
       destination:
         server: "{{ .server }}"
         namespace: "ecflow-web"

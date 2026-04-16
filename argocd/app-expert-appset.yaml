@@ -25,16 +25,16 @@ spec:
               repoURL: git@github.com:recmanj/argocd-multirepo-expert.git
               revision: HEAD
               directories:
-                - path: "envs/{{ .values.env }}"
+                - path: "*/envs/{{ .values.env }}"
   template:
     metadata:
-      name: "expert"
+      name: '{{ index .path.segments 0 }}'
     spec:
       project: expert
       source:
         repoURL: git@github.com:recmanj/argocd-multirepo-expert.git
         targetRevision: HEAD
-        path: "envs/{{ .values.env }}"
+        path: "{{ .path.path }}"
       destination:
         server: "{{ .server }}"
         namespace: "expert"

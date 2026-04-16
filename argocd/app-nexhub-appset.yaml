@@ -25,16 +25,16 @@ spec:
               repoURL: git@github.com:recmanj/argocd-multirepo-nexhub.git
               revision: HEAD
               directories:
-                - path: "envs/{{ .values.env }}"
+                - path: "*/envs/{{ .values.env }}"
   template:
     metadata:
-      name: "nexhub"
+      name: '{{ index .path.segments 0 }}'
     spec:
       project: nexhub
       source:
         repoURL: git@github.com:recmanj/argocd-multirepo-nexhub.git
         targetRevision: HEAD
-        path: "envs/{{ .values.env }}"
+        path: "{{ .path.path }}"
       destination:
         server: "{{ .server }}"
         namespace: "nexhub"

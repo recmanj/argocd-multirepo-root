@@ -25,16 +25,16 @@ spec:
               repoURL: git@github.com:recmanj/argocd-multirepo-demo-app-kustomize.git
               revision: HEAD
               directories:
-                - path: "envs/{{ .values.env }}"
+                - path: "*/envs/{{ .values.env }}"
   template:
     metadata:
-      name: "demo-app-kustomize"
+      name: '{{ index .path.segments 0 }}'
     spec:
       project: demo-app-kustomize
       source:
         repoURL: git@github.com:recmanj/argocd-multirepo-demo-app-kustomize.git
         targetRevision: HEAD
-        path: "envs/{{ .values.env }}"
+        path: "{{ .path.path }}"
       destination:
         server: "{{ .server }}"
         namespace: "demo-app"

@@ -31,6 +31,8 @@ spec:
       server: https://kubernetes.default.svc
     - namespace: demo-app-chart
       server: https://kubernetes.default.svc
+    - namespace: demo-app-kustomize-chart
+      server: https://kubernetes.default.svc
     - namespace: ecflow-web
       server: https://kubernetes.default.svc
     - namespace: expert

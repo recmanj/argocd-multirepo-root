@@ -11,6 +11,9 @@ spec:
     - "missingkey=error"
   syncPolicy:
     preserveResourcesOnDeletion: true
+  ignoreApplicationDifferences:
+    - jsonPointers:
+        - /spec/syncPolicy
   generators:
     - matrix:
         generators:

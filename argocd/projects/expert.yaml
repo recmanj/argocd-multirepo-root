@@ -8,7 +8,7 @@ metadata:
 spec:
   description: expert team — deploys the expert app from the expert repo using Kustomize.
   sourceRepos:
-    - git@github.com:recmanj/argocd-multirepo-expert.git
+    - https://github.com/recmanj/argocd-multirepo-expert.git
   destinations:
     - namespace: expert
       server: https://kubernetes.default.svc

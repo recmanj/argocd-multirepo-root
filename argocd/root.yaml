@@ -6,7 +6,7 @@ metadata:
 spec:
   project: admin
   source:
-    repoURL: git@github.com:recmanj/argocd-multirepo-root.git
+    repoURL: https://github.com/recmanj/argocd-multirepo-root.git
     targetRevision: HEAD
     path: argocd
     directory:

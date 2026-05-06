@@ -25,7 +25,7 @@ spec:
               values:
                 env: '{{ index .metadata.labels "env" }}'
           - git:
-              repoURL: git@github.com:recmanj/argocd-multirepo-demo-app-kustomize-chart.git
+              repoURL: https://github.com/recmanj/argocd-multirepo-demo-app-kustomize-chart.git
               revision: HEAD
               directories:
                 - path: "*/envs/{{ .values.env }}"
@@ -35,7 +35,7 @@ spec:
     spec:
       project: demo-app-kustomize-chart
       source:
-        repoURL: git@github.com:recmanj/argocd-multirepo-demo-app-kustomize-chart.git
+        repoURL: https://github.com/recmanj/argocd-multirepo-demo-app-kustomize-chart.git
         targetRevision: HEAD
         path: "{{ .path.path }}"
       destination:

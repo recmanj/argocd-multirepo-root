@@ -25,7 +25,7 @@ spec:
               values:
                 env: '{{ index .metadata.labels "env" }}'
           - git:
-              repoURL: git@github.com:recmanj/argocd-multirepo-demo-app-helm.git
+              repoURL: https://github.com/recmanj/argocd-multirepo-demo-app-helm.git
               revision: HEAD
               files:
                 - path: "*/envs/{{ .values.env }}/config.json"
@@ -43,7 +43,7 @@ spec:
             valueFiles:
               - $values/{{ index .path.segments 0 }}/values.yaml
               - $values/{{ index .path.segments 0 }}/envs/{{ .values.env }}/values.yaml
-        - repoURL: git@github.com:recmanj/argocd-multirepo-demo-app-helm.git
+        - repoURL: https://github.com/recmanj/argocd-multirepo-demo-app-helm.git
           targetRevision: HEAD
           ref: values
       destination:

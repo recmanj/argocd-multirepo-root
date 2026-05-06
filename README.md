@@ -57,9 +57,7 @@ Every ApplicationSet uses a `matrix(clusters x git)` generator - one Application
 
 ```bash
 just install-argocd          # 1. Install ArgoCD on the cluster
-just repo-add-all            # 2. Register credentials for sibling repos
-just bootstrap test          # 3. Bootstrap environment (test | staging | prod)
-argocd app list              # 4. Watch sync
+just bootstrap test          # 2. Bootstrap environment (test | staging | prod)
 ```
 
 The bootstrap Helm chart creates a root Application (points at `argocd/`), a cluster secret with the `env` label, and the `admin` AppProject.

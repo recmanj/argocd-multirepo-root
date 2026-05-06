@@ -8,7 +8,7 @@ metadata:
 spec:
   description: Reserved for future platform-level apps that span multiple teams. Currently unused (platform-resources uses the infrastructure project).
   sourceRepos:
-    - git@github.com:recmanj/argocd-multirepo-infra.git
+    - https://github.com/recmanj/argocd-multirepo-infra.git
   destinations: []
   clusterResourceWhitelist: []
   namespaceResourceWhitelist: []

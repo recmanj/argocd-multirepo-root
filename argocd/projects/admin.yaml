@@ -10,7 +10,7 @@ metadata:
 spec:
   description: ArgoCD control plane (root app, AppProjects, ApplicationSets). Restricted to admins.
   sourceRepos:
-    - git@github.com:recmanj/argocd-multirepo-root.git
+    - https://github.com/recmanj/argocd-multirepo-root.git
   destinations:
     - namespace: argocd
       server: https://kubernetes.default.svc

@@ -25,7 +25,7 @@ spec:
               values:
                 env: '{{ index .metadata.labels "env" }}'
           - git:
-              repoURL: git@github.com:recmanj/argocd-multirepo-infra.git
+              repoURL: https://github.com/recmanj/argocd-multirepo-infra.git
               revision: HEAD
               files:
                 - path: "infra-helm/*/envs/{{ .values.env }}/config.json"
@@ -45,7 +45,7 @@ spec:
             valueFiles:
               - $values/infra-helm/{{ index .path.segments 1 }}/values.yaml
               - $values/infra-helm/{{ index .path.segments 1 }}/envs/{{ .values.env }}/values.yaml
-        - repoURL: git@github.com:recmanj/argocd-multirepo-infra.git
+        - repoURL: https://github.com/recmanj/argocd-multirepo-infra.git
           targetRevision: HEAD
           ref: values
       destination:

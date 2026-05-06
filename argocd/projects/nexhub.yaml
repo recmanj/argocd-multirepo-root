@@ -8,7 +8,7 @@ metadata:
 spec:
   description: nexhub team — deploys the nexhub app from the nexhub repo using Kustomize.
   sourceRepos:
-    - git@github.com:recmanj/argocd-multirepo-nexhub.git
+    - https://github.com/recmanj/argocd-multirepo-nexhub.git
   destinations:
     - namespace: nexhub
       server: https://kubernetes.default.svc

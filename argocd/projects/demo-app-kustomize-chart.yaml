@@ -8,7 +8,7 @@ metadata:
 spec:
   description: Demo team — deploys the demo app from the demo-app-kustomize-chart repo using Kustomize helmCharts per env.
   sourceRepos:
-    - git@github.com:recmanj/argocd-multirepo-demo-app-kustomize-chart.git
+    - https://github.com/recmanj/argocd-multirepo-demo-app-kustomize-chart.git
   destinations:
     - namespace: demo-app-kustomize-chart
       server: https://kubernetes.default.svc

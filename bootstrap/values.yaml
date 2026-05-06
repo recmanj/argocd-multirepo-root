@@ -1,4 +1,4 @@
 env: ""
-repoURL: git@github.com:recmanj/argocd-multirepo-root.git
+repoURL: https://github.com/recmanj/argocd-multirepo-root.git
 targetRevision: HEAD
 rootAppPath: argocd

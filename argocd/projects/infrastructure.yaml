@@ -8,7 +8,7 @@ metadata:
 spec:
   description: Platform infrastructure managed by the ops team (ArgoCD, cert-manager, CloudNativePG, observability, plus cluster-wide platform resources like ClusterIssuers and per-app PG Cluster CRs).
   sourceRepos:
-    - git@github.com:recmanj/argocd-multirepo-infra.git
+    - https://github.com/recmanj/argocd-multirepo-infra.git
     - https://charts.jetstack.io
     - https://grafana.github.io/helm-charts
     - https://cloudnative-pg.github.io/charts

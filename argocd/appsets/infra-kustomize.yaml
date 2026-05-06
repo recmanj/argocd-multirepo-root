@@ -25,7 +25,7 @@ spec:
               values:
                 env: '{{ index .metadata.labels "env" }}'
           - git:
-              repoURL: git@github.com:recmanj/argocd-multirepo-infra.git
+              repoURL: https://github.com/recmanj/argocd-multirepo-infra.git
               revision: HEAD
               files:
                 - path: "infra-kustomize/*/config.json"
@@ -37,7 +37,7 @@ spec:
     spec:
       project: "{{ .appProject }}"
       source:
-        repoURL: git@github.com:recmanj/argocd-multirepo-infra.git
+        repoURL: https://github.com/recmanj/argocd-multirepo-infra.git
         targetRevision: HEAD
         path: "infra-kustomize/{{ .appName }}/envs/{{ .values.env }}"
       destination:

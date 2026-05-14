@@ -6,7 +6,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
-  description: Team B — deploys the demo app via Kustomize, merging the public base (demo-app-kustomize) with the private config (demo-app-kustomize-config) per env using ArgoCD multi-source.
+  description: Team B — deploys the demo app via Kustomize. AppSet source is the private config repo (demo-app-kustomize-config); its env overlays pull the public base (demo-app-kustomize) via kustomize remote git URL and pin image tags via versions.yaml.
   sourceRepos:
     - https://github.com/recmanj/argocd-multirepo-demo-app-kustomize.git
     - https://github.com/recmanj/argocd-multirepo-demo-app-kustomize-config.git

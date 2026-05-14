@@ -6,9 +6,10 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
-  description: Team B — deploys the demo app from the demo-app-kustomize repo using Kustomize overlays per env.
+  description: Team B — deploys the demo app via Kustomize, merging the public base (demo-app-kustomize) with the private config (demo-app-kustomize-config) per env using ArgoCD multi-source.
   sourceRepos:
     - https://github.com/recmanj/argocd-multirepo-demo-app-kustomize.git
+    - https://github.com/recmanj/argocd-multirepo-demo-app-kustomize-config.git
   destinations:
     - namespace: demo-app
       server: https://kubernetes.default.svc

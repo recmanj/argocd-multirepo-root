@@ -25,7 +25,7 @@ spec:
               values:
                 env: '{{ index .metadata.labels "env" }}'
           - git:
-              repoURL: https://github.com/recmanj/argocd-multirepo-demo-app-kustomize.git
+              repoURL: https://github.com/recmanj/argocd-multirepo-demo-app-kustomize-config.git
               revision: HEAD
               directories:
                 - path: "*/envs/{{ .values.env }}"
@@ -34,10 +34,13 @@ spec:
       name: '{{ index .path.segments 0 }}'
     spec:
       project: demo-app-kustomize
-      source:
-        repoURL: https://github.com/recmanj/argocd-multirepo-demo-app-kustomize.git
-        targetRevision: HEAD
-        path: "{{ .path.path }}"
+      sources:
+        - repoURL: https://github.com/recmanj/argocd-multirepo-demo-app-kustomize.git
+          targetRevision: HEAD
+          ref: base
+        - repoURL: https://github.com/recmanj/argocd-multirepo-demo-app-kustomize-config.git
+          targetRevision: HEAD
+          path: "{{ .path.path }}"
       destination:
         server: "{{ .server }}"
         namespace: "demo-app"

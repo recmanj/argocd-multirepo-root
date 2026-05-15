@@ -37,3 +37,5 @@ spec:
       kind: Job
     - group: batch
       kind: CronJob
+    - group: bitnami.com
+      kind: SealedSecret

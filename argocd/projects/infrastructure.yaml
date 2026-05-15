@@ -13,6 +13,7 @@ spec:
     - https://grafana.github.io/helm-charts
     - https://cloudnative-pg.github.io/charts
     - https://argoproj.github.io/argo-helm
+    - https://bitnami-labs.github.io/sealed-secrets
   destinations:
     - namespace: argocd
       server: https://kubernetes.default.svc
@@ -25,6 +26,8 @@ spec:
     - namespace: observability
       server: https://kubernetes.default.svc
     - namespace: argocd-image-updater
+      server: https://kubernetes.default.svc
+    - namespace: sealed-secrets
       server: https://kubernetes.default.svc
     # Per-app namespaces needed because platform-resources (PG Cluster CRs) deploys into each app namespace
     - namespace: demo-app
